@@ -5,10 +5,7 @@ from sklearn.linear_model import Ridge
 from sklearn.model_selection import KFold, cross_val_score
 
 
-# ============================================================
-# 1. LOAD DATA
-# ============================================================
-
+# loading data
 train1 = pd.read_csv("BT2024113_train_var1.csv")
 test1 = pd.read_csv("BT2024113_test_var1.csv")
 
@@ -16,10 +13,7 @@ train2 = pd.read_csv("BT2024113_train_var2.csv")
 test2 = pd.read_csv("BT2024113_test_var2.csv")
 
 
-# ============================================================
-# 2. SEPARATE FEATURES AND TARGET
-# ============================================================
-
+# seperating features,target 
 X1 = train1.drop(columns="y")
 y1 = train1["y"]
 
@@ -27,10 +21,7 @@ X2 = train2.drop(columns="y")
 y2 = train2["y"]
 
 
-# ============================================================
-# 3. CROSS-VALIDATION SETUP
-# ============================================================
-
+# cross validation setting up
 kf = KFold(
     n_splits=5,
     shuffle=True,
@@ -38,10 +29,7 @@ kf = KFold(
 )
 
 
-# ============================================================
-# 4. FIND BEST DEGREE FOR VAR1
-# ============================================================
-
+# finding the best degree for var1
 print("Testing polynomial degrees for Var1...")
 
 var1_results = []
@@ -86,10 +74,7 @@ print(
 )
 
 
-# ============================================================
-# 5. FIND BEST DEGREE FOR VAR2
-# ============================================================
-
+#finding the best degree for var2
 print("\nTesting polynomial degrees for Var2...")
 
 var2_results = []
@@ -134,10 +119,7 @@ print(
 )
 
 
-# ============================================================
-# 6. CREATE FINAL VAR1 MODEL
-# ============================================================
-
+# creating final var1 model 
 model1 = make_pipeline(
     PolynomialFeatures(
         degree=best_degree_var1,
@@ -148,10 +130,7 @@ model1 = make_pipeline(
 )
 
 
-# ============================================================
-# 7. CREATE FINAL VAR2 MODEL
-# ============================================================
-
+# creating var 2 model final
 model2 = make_pipeline(
     PolynomialFeatures(
         degree=best_degree_var2,
@@ -162,26 +141,17 @@ model2 = make_pipeline(
 )
 
 
-# ============================================================
-# 8. TRAIN FINAL MODELS
-# ============================================================
-
+# training teh final models
 model1.fit(X1, y1)
 model2.fit(X2, y2)
 
 
-# ============================================================
-# 9. GENERATE TEST PREDICTIONS
-# ============================================================
-
+# generating test predictions
 pred1 = model1.predict(test1)
 pred2 = model2.predict(test2)
 
 
-# ============================================================
-# 10. SAVE PREDICTION FILES
-# ============================================================
-
+# saving those files
 pd.DataFrame({
     "y": pred1
 }).to_csv(
@@ -195,11 +165,6 @@ pd.DataFrame({
     "BT2024113_pred_var2.csv",
     index=False
 )
-
-
-# ============================================================
-# 11. FINAL OUTPUT
-# ============================================================
 
 print("\n========================================")
 print("FINAL RESULTS")
